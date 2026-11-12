@@ -2126,7 +2126,7 @@ function cuSum(){
     <div class="kpi alert"><div class="lab">Подтем в красной зоне</div><div class="val">${red.length} <small style="font-size:16px" class="faint">из ${big.length}</small></div><div class="note">негатив 50% и больше</div></div>
     <div class="kpi" style="cursor:pointer" onclick="cuGo({tab:'cons'})"><div class="lab">Отзывов о содержании ${info('Каждый отзыв прочитан вручную. Убраны сбои платформы, благодарности без конкретики, реплики «у меня то же самое», модули АИС и видеолекции; '+fmt(T.consult)+' вопросов о доступе, зачёте и сроках — во вкладке «Вопросы к методологам»')}</div><div class="val">${fmt(T.keep)}</div><div class="note">${T.raw?`из ${fmt(T.raw)} комментариев`:cuPerLbl()}</div></div>
    </div>
-   ${S.per==='all'?`<div class="warnline" style="cursor:pointer" onclick="cuGo({tab:'com',tone:'',th:'',g:'',l:'',q:''})">Новое за 5–10 ноября: ${fmt(nw.length)} отзывов о содержании — позитив ${nP}%, нейтрально ${nU}%, негатив ${nN}%.${cuGapNote()?' '+cuGapNote():''}</div>`:`<div class="warnline">${cuPerLbl()[0].toUpperCase()+cuPerLbl().slice(1)}: ${cuPl(CU_D.tot.keep,'отзыв','отзыва','отзывов')} о содержании. Описания уроков, «что улучшить» и план действий написаны по всем отзывам; числа — за период.${cuGapNote()?' '+cuGapNote():''}</div>`}</section>
+   </section>
   ${cuDynPanel()}
   <div style="margin-top:14px">${conclBox('content')}</div>
   ${cuTrack()}
@@ -2197,7 +2197,7 @@ function cuBody(){
 }
 const _cuF=cuF;cuF=function(){const a=_cuF();return CU.tsF?a.filter(c=>c[5]===CU.tsF):a};
 function dCurated(){
-  return `<div class="grp grp-met" style="margin-top:0"><div class="grp-h"><span class="grp-dot"></span>Содержание курса<span class="grp-s">ручной разбор отзывов о содержании · ${cuPerLbl()}${S.per!=='all'?' · '+cuPl(CU_D.tot.keep,'отзыв','отзыва','отзывов'):''}</span></div>
+  return `<div class="grp grp-met" style="margin-top:0"><div class="grp-h"><span class="grp-dot"></span>Содержание курса<span class="grp-s">ручной разбор отзывов о содержании</span></div>
   <div id="cu-root" style="scroll-margin-top:70px">${cuBody()}</div>
   <div class="small faint" style="margin:10px 0 18px">Источник — ручной разбор отзывов о содержании (snk_dashboard, данные по 10 ноября, 10:20) + 11 ноября — 113 отзывов: разбор Claude по тем же правилам из выгрузки комментариев платформы (11 ноября, весь день); 10 ноября после 10:20 комментариев в выгрузках нет${CU_D.tot.raw?`: из ${fmt(CU_D.tot.raw)} комментариев оставлено ${fmt(CU_D.tot.keep)} содержательных`:`; период — ${cuPerLbl()}, отзывов — ${fmt(CU_D.tot.keep)}`}, каждый прочитан и перепроверен. Темы — по учебно-тематическому плану, номера уроков на платформе — рядом.</div></div>`;
 }
@@ -2439,7 +2439,7 @@ function cuApply(per){if(CU_PER===per)return;CU_PER=per;const r=cuRange(per),inR
 // подпись периода для ручного разбора
 const dRng=(a,b)=>a===b?d2l(a):a.slice(5,7)===b.slice(5,7)?`${+a.slice(8)} – ${d2l(b)}`:`${d2l(a)} – ${d2l(b)}`;
 function cuPainTop(){const c={};CU_D.comments.filter(x=>x[0]==='N').forEach(x=>c[x[3]]=(c[x[3]]||0)+1);const e=Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,3);return e.length?'Главные претензии: '+e.map(([k,v])=>((CU_D.pain[k]||[CU_D.themes[k]||k])[0]).toLowerCase()+' ('+v+')').join(', ')+'.':'Негативных отзывов за период нет.'}
-function cuPerLbl(){const r=cuRange(S.per);return r?dRng(r[0],r[1])+(r[0]<='2026-11-10'&&r[1]>='2026-11-10'?' (10 ноября — до 10:20)':'')+(r[1]>='2026-11-11'?' (11 ноября — разбор Claude)':''):'всё время, по 11 ноября (11 ноября — разбор Claude)'}
+function cuPerLbl(){const r=cuRange(S.per);return r?dRng(r[0],r[1]):'всё время'}
 function cuGapNote(){const r=cuRange(S.per);const a=r?r[0]:'2026-09-01',b=r?r[1]:'2026-12-31';const s=a>CU_GAP[0]?a:CU_GAP[0],e=b<CU_GAP[1]?b:CU_GAP[1];
   return s<=e?`Отзывы за ${dRng(s,e)} в ручной разбор не попали — в данных нет.`:''}
 function render(){
